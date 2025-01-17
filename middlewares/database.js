@@ -16,11 +16,14 @@ export class Database{
         fs.writeFile(databasePath, JSON.stringify(this.#database));
     }
 
-    select(table){
-        if(!this.#database[table]){
-            this.#database[table] = [];
+    select(table,search){
+        let data = this.#database[table] ?? []
+        if (search){
+            data = data.filter(row => {
+                return Object.entries(search).some(([key, value]) => row[key] === value)
+            })
         }
-        return this.#database[table];
+        return data
     }
 
     insert(table, data){
